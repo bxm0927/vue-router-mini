@@ -1,18 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="nav">
+      <v-link href="/">Home</v-link> |
+      <v-link href="/about">About</v-link> |
+      <v-link href="/foo">Foo</v-link>
+    </div>
+
+    <component :is="viewCompontent" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import VLink from '@/components/VLink.vue'
+import routers from '@/router'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    VLink,
+  },
+  computed: {
+    viewCompontent() {
+      const matchingView = routers[this.$root.currentRoute]
+      return matchingView
+        ? require(`./pages/${matchingView}.vue`).default
+        : require('./pages/NotFound.vue').default
+    },
+  },
 }
 </script>
 
